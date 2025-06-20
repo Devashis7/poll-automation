@@ -1,6 +1,10 @@
+import os
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
+from google import genai
+from google.genai import types
 
+client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 app = FastAPI()
 
 @app.websocket("/transcribe")
@@ -9,8 +13,20 @@ async def websocket_audio_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_bytes()
-            print(f"Received {len(data)} bytes of audio data.")
-            await websocket.send_text(f"{len(data)} bytes whisper ko do")
+            print("Bytes: ", len(data))
+            response = client.models.generate_content(
+              model='gemini-2.5-flash',
+                config=types.GenerateContentConfig(system_instruction = 'Transcribe the audio clip into english'),
+              contents=[
+                types.Part.from_bytes(
+                  data=data,
+                  mime_type='audio/webm',
+                )
+              ]
+            )
+            print(response.text)
+            print("Done")
+            await websocket.send_text(response.text)
     except WebSocketDisconnect:
         print("Client disconnected")
 
