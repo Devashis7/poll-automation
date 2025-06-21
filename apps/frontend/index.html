@@ -17,9 +17,36 @@
     <script>
         let ws;
         let mediaRecorder;
+        let stream;
+        let shouldContinue = false;
+
+        async function startRecordingChunk() {
+            mediaRecorder = new MediaRecorder(stream);
+
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0 && ws.readyState === WebSocket.OPEN) {
+                    ws.send(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                if (shouldContinue) {
+                    // Restart recording after 30s chunk
+                    startRecordingChunk();
+                }
+            };
+
+            mediaRecorder.start(); // Start recording
+            setTimeout(() => {
+                if (mediaRecorder.state === "recording") {
+                    mediaRecorder.stop();
+                }
+            }, 30 * 1000); // 30 seconds
+        }
 
         document.getElementById('startBtn').addEventListener('click', async () => {
-            ws = new WebSocket('ws://localhost:8000/transcribe');
+            ws = new WebSocket('ws://localhost:8080/transcribe');
 
             ws.onopen = () => {
                 console.log('WebSocket connection established');
@@ -36,23 +63,19 @@
                 document.getElementById('status').innerText = 'Status: Disconnected';
             };
 
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            mediaRecorder = new MediaRecorder(stream);
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0 && ws.readyState === WebSocket.OPEN) {
-                    ws.send(event.data);
-                }
-            };
-
-            mediaRecorder.start(10 * 1000); // Send audio in chunks every 10 seconds
+            stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            shouldContinue = true;
+            startRecordingChunk();
 
             document.getElementById('startBtn').disabled = true;
             document.getElementById('stopBtn').disabled = false;
         });
 
         document.getElementById('stopBtn').addEventListener('click', () => {
-            mediaRecorder.stop();
+            shouldContinue = false;
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+            }
             ws.close();
 
             document.getElementById('startBtn').disabled = false;
