@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2022",                     // ⬅️ Upgrade to ES2022 for `.at()` support
+    "lib": ["ES2022", "DOM"],              // ⬅️ Add lib explicitly
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "../../",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@poll-automation/types": ["../../shared/types/src/index"],
+      "@poll-automation/types/*": ["../../shared/types/src/*"]
+    }
+  },
+  "include": ["src/**/*", "../../shared/types/src/**/*"],
+  "exclude": ["node_modules"]
+}
