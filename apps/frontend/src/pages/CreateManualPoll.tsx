@@ -16,7 +16,7 @@ import {
 } from "lucide-react"
 // Imports for GlassCard and DashboardLayout were removed as they were causing resolution errors.
 // import GlassCard from "../components/GlassCard"
-// import DashboardLayout from "../components/DashboardLayout"
+import DashboardLayout from "../components/DashboardLayout"
 
 // Interface for a single poll option
 interface PollOption {
@@ -288,6 +288,7 @@ const CreateManualPoll = () => {
 
   return (
     // DashboardLayout replaced with a div with similar background styling
+    <DashboardLayout>
     <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
@@ -815,6 +816,7 @@ const CreateManualPoll = () => {
         </div>
       </div>
     </div>
+    </DashboardLayout>
   )
 }
 
