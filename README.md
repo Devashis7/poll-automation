@@ -187,16 +187,21 @@ VITE_BACKEND_WS_URL=ws://localhost:3001/transcription
 VITE_PORT=5173
 VITE_BACKEND_API_URL=http://localhost:3000
 VITE_SOCKETIO_URL=http://localhost:3000
+VITE_BACKEND_WS_URL=ws://localhost:3001/transcription
+VITE_PORT=5173
+VITE_BACKEND_API_URL=http://localhost:3000
+VITE_SOCKETIO_URL=http://localhost:3000
 VITE_CHUNK_INTERVAL=30000
+VITE_BACKEND_WS_URL_GUEST=ws://localhost:3001/transcription
 VITE_BACKEND_WS_URL_GUEST=ws://localhost:3001/transcription
 ```
 
 #### `services/whisper/.env`
 
 ```env
-WHISPER_MODEL_SIZE=small
-BUFFER_DURATION_SECONDS=60
-WHISPER_SERVICE_PORT=8000
+CHUNK_DURATION=30
+MODEL=tiny
+SILENCE_THRESHOLD=92000
 ```
 
 Available Whisper model sizes: `tiny`, `base`, `small`, `medium`, `large-v1`, `large-v2`, `large-v3`.
@@ -204,9 +209,10 @@ Available Whisper model sizes: `tiny`, `base`, `small`, `medium`, `large-v1`, `l
 #### `services/pollgen-llm/.env`
 
 ```env
-GEMINI_API_KEY=<your Gemini API key>
-MONGO_URI=mongodb://localhost:27017
-HOME=<your home directory, e.g., "C:\Users\YourUsername">
+BACKEND_SETTINGS_API=http://localhost:5001/settings
+GEMINI_API_KEY="GEMINI API KEY"
+MONGO_URI="mongodb://localhost:27017"
+USER_HOME=<your home directory, e.g., "C:\Users\YourUsername">
 ```
 
 ### 🛠️ Monorepo Setup
