@@ -16,9 +16,9 @@ pnpm-lock.yaml
 
 # Environment variables
 
-**/.env.local
-**/.env.*.local
-**/!.env.example
+#**/.env.local
+#**/.env.*.local
+#**/!.env.example
 
 # OS files
 **/.DS_Store

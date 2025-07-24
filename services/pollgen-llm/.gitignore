@@ -3,5 +3,5 @@ dist/
 .build/
 .cache/
 *.log
-.env
+#.env
 *.tsbuildinfo
